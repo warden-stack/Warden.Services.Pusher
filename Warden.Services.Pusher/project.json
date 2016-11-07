@@ -5,7 +5,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "Warden.Common": "1.0.0-*",
+    "Warden.Common": "1.0.*",
     "Autofac": "4.1.0",
     "Nancy": "2.0.0-barneyrubble",
     "NLog.Extensions.Logging": "1.0.0-*",
