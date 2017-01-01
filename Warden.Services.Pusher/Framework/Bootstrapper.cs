@@ -8,8 +8,11 @@ using Warden.Common.Events;
 using Warden.Common.Events.Wardens;
 using Warden.Common.Nancy;
 using Warden.Common.Extensions;
+using Warden.Common.Nancy;
+using Warden.Common.Nancy.Serialization;
 using Warden.Services.Pusher.Handlers;
 using Warden.Services.Pusher.Hubs;
+using Newtonsoft.Json;
 
 namespace Warden.Services.Pusher.Framework
 {
@@ -29,6 +32,7 @@ namespace Warden.Services.Pusher.Framework
             container.Update(builder =>
             {
                 var rawRabbitConfiguration = _configuration.GetSettings<RawRabbitConfiguration>();
+                builder.RegisterType<CustomJsonSerializer>().As<JsonSerializer>().SingleInstance();
                 builder.RegisterInstance(rawRabbitConfiguration).SingleInstance();
                 builder.RegisterInstance(BusClientFactory.CreateDefault(rawRabbitConfiguration))
                     .As<IBusClient>();
