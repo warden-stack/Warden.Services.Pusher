@@ -1,6 +1,5 @@
-﻿using Warden.Common.Events.Wardens;
-using Warden.Common.Host;
-using Warden.Services.Pusher.Framework;
+﻿using Warden.Common.Host;
+using Warden.Services.WardenChecks.Shared.Events;
 
 namespace Warden.Services.Pusher
 {
@@ -10,7 +9,7 @@ namespace Warden.Services.Pusher
         {
             WebServiceHost
                 .Create<Startup>(port: 5054)
-                .UseAutofac(Bootstrapper.LifetimeScope)
+                .UseAutofac(Startup.LifetimeScope)
                 .UseRabbitMq()
                 .SubscribeToEvent<WardenCheckResultProcessed>()
                 .Build()

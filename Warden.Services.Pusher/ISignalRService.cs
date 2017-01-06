@@ -1,5 +1,7 @@
 ﻿using System;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
+using NLog;
+using Warden.Services.Pusher.Hubs;
 
 namespace Warden.Services.Pusher
 {
@@ -10,9 +12,10 @@ namespace Warden.Services.Pusher
 
     public class SignalRService : ISignalRService
     {
-        private readonly IHubContext _hub;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IHubContext<WardenHub> _hub;
 
-        public SignalRService(IHubContext hub)
+        public SignalRService(IHubContext<WardenHub> hub)
         {
             _hub = hub;
         }
@@ -20,7 +23,9 @@ namespace Warden.Services.Pusher
         public void SendCheckResultSaved(Guid organizationId, Guid wardenId, object checkResult)
         {
             var groupName = GetWardenGroupName(organizationId, wardenId);
-            _hub.Clients.Group(groupName).checkSaved(checkResult);
+            Logger.Debug($"Publishing CheckResultSaved message");
+            _hub.Clients.All.InvokeAsync("checkSaved", checkResult);
+            //_hub.Clients.Group(groupName).checkSaved(checkResult);
         }
 
         private static string GetWardenGroupName(Guid organizationId, Guid wardenId)
