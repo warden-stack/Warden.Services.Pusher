@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Autofac;
-using Autofac.Core.Lifetime;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +14,7 @@ using Warden.Common.Events;
 using Warden.Common.Extensions;
 using Warden.Common.RabbitMq;
 using Warden.Services.Pusher.Hubs;
+using Warden.Services.Pusher.Services;
 
 namespace Warden.Services.Pusher
 {
@@ -53,7 +53,8 @@ namespace Warden.Services.Pusher
             return new AutofacServiceProvider(LifetimeScope);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, IApplicationLifetime appLifeTime)
         {
             loggerFactory.AddNLog();
             env.ConfigureNLog("nlog.config");
@@ -62,6 +63,8 @@ namespace Warden.Services.Pusher
                 .AllowAnyOrigin()
                 .AllowCredentials());
             app.UseSignalR(builder => builder.MapHub<WardenHub>("/hub"));
+
+            appLifeTime.ApplicationStopped.Register(() => LifetimeScope.Dispose());
         }
     }
 }

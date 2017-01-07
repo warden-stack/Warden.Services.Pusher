@@ -1,15 +1,11 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.SignalR;
 using NLog;
 using Warden.Services.Pusher.Hubs;
+using Warden.Services.WardenChecks.Shared.Dto;
 
-namespace Warden.Services.Pusher
+namespace Warden.Services.Pusher.Services
 {
-    public interface ISignalRService
-    {
-        void SendCheckResultSaved(Guid organizationId, Guid wardenId, object checkResult);
-    }
-
     public class SignalRService : ISignalRService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -20,11 +16,11 @@ namespace Warden.Services.Pusher
             _hub = hub;
         }
 
-        public void SendCheckResultSaved(Guid organizationId, Guid wardenId, object checkResult)
+        public void SendCheckResultSaved(Guid organizationId, Guid wardenId, CheckResultDto checkResult)
         {
             var groupName = GetWardenGroupName(organizationId, wardenId);
-            Logger.Debug($"Publishing CheckResultSaved message");
-            _hub.Clients.All.InvokeAsync("checkSaved", checkResult);
+            Logger.Debug($"Publishing 'check:saved' message.");
+            _hub.Clients.All.InvokeAsync("check:saved", checkResult);
             //_hub.Clients.Group(groupName).checkSaved(checkResult);
         }
 

@@ -10,7 +10,7 @@ namespace Warden.Services.Pusher
             WebServiceHost
                 .Create<Startup>(port: 5054)
                 .UseAutofac(Startup.LifetimeScope)
-                .UseRabbitMq()
+                .UseRabbitMq(queueName: typeof(Program).Namespace)
                 .SubscribeToEvent<WardenCheckResultProcessed>()
                 .Build()
                 .Run();
