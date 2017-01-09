@@ -1,4 +1,5 @@
 ﻿using Warden.Common.Host;
+using Warden.Services.Operations.Shared.Events;
 using Warden.Services.WardenChecks.Shared.Events;
 
 namespace Warden.Services.Pusher
@@ -12,6 +13,7 @@ namespace Warden.Services.Pusher
                 .UseAutofac(Startup.LifetimeScope)
                 .UseRabbitMq(queueName: typeof(Program).Namespace)
                 .SubscribeToEvent<WardenCheckResultProcessed>()
+                .SubscribeToEvent<OperationUpdated>()
                 .Build()
                 .Run();
         }

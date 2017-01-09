@@ -9,19 +9,31 @@ namespace Warden.Services.Pusher.Hubs
     public class WardenHub : Hub
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConcurrentDictionary<string, string> _clients = new ConcurrentDictionary<string, string>();
-        
 
         public override Task OnConnectedAsync()
         {
-            Logger.Debug($"Connected to hub, connectionId:{Context.ConnectionId}");
+            Logger.Debug($"Connected to WardenHub, connection id: {Context.ConnectionId}.");
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync()
         {
-            Logger.Debug($"Disconnected from hub, connectionId:{Context.ConnectionId}");
+            Logger.Debug($"Disconnected from WardenHub, connection id: {Context.ConnectionId}.");
             return base.OnDisconnectedAsync();
+        }
+
+        public async Task InitializeAsync(string header)
+        {
+            var token = Startup.JwtTokenHandler.GetFromAuthorizationHeader(header);
+            if (Startup.JwtTokenHandler.IsValid(token) == false)
+            {
+                Logger.Debug("Authorization token is invalid, disconnecting client.");
+                await Clients.Client(Context.ConnectionId).InvokeAsync("disconnect");
+                return;
+            }
+            var userId = token.Sub;
+            Logger.Debug($"Assigning connection id: {Context.ConnectionId} to user: {userId}.");
+            await Groups.AddAsync(userId);
         }
 
         //public override async Task OnConnected()

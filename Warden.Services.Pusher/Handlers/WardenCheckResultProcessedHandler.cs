@@ -7,17 +7,16 @@ namespace Warden.Services.Pusher.Handlers
 {
     public class WardenCheckResultProcessedHandler : IEventHandler<WardenCheckResultProcessed>
     {
-        private readonly ISignalRService _signalRService;
+        private readonly ICheckResultService _checkResultService;
 
-        public WardenCheckResultProcessedHandler(ISignalRService signalRService)
+        public WardenCheckResultProcessedHandler(ICheckResultService checkResultService)
         {
-            _signalRService = signalRService;
+            _checkResultService = checkResultService;
         }
 
         public async Task HandleAsync(WardenCheckResultProcessed @event)
         {
-            _signalRService.SendCheckResultSaved(@event.OrganizationId, @event.WardenId, @event.CheckResult);
-            await Task.CompletedTask;
+            await _checkResultService.PublishCheckResultCreatedAsync(@event.OrganizationId, @event.WardenId, @event.CheckResult);
         }
     }
 }
