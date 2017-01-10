@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Warden.Services.Pusher.Extensions;
 using Warden.Services.Pusher.Hubs;
 using Warden.Services.WardenChecks.Shared.Dto;
 
@@ -20,7 +21,7 @@ namespace Warden.Services.Pusher.Services
             await _hubContext
                 .Clients
                 .All
-                .InvokeAsync("check_result_created", checkResult);
+                .InvokeAsync("check_result_created", checkResult.ToCamelCase());
         }
 
         private static string GetWardenGroupName(Guid organizationId, Guid wardenId)
