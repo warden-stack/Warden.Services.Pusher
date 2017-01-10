@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Lockbox.Client.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,11 @@ namespace Warden.Services.Pusher
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables()
                 .SetBasePath(env.ContentRootPath);
+                
+            if (env.IsProduction())
+            {
+                builder.AddLockbox();
+            }
 
             Configuration = builder.Build();
         }
