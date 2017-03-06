@@ -1,6 +1,6 @@
 ﻿using Warden.Common.Host;
-using Warden.Services.Operations.Shared.Events;
-using Warden.Services.WardenChecks.Shared.Events;
+using Warden.Messages.Events.Operations;
+using Warden.Messages.Events.WardenChecks;
 
 namespace Warden.Services.Pusher
 {

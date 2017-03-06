@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using NLog;
-using Warden.Common.Events;
-using Warden.Services.Operations.Shared.Events;
+using Warden.Messages.Events;
+using Warden.Messages.Events.Operations;
 using Warden.Services.Pusher.Services;
 
 namespace Warden.Services.Pusher.Handlers

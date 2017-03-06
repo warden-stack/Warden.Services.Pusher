@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Warden.Services.WardenChecks.Shared.Dto;
+using Warden.Services.WardenChecks.Dto;
 
 namespace Warden.Services.Pusher.Services
 {

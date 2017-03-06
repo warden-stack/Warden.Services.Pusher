@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Warden.Services.Pusher.Extensions;
 using Warden.Services.Pusher.Hubs;
-using Warden.Services.WardenChecks.Shared.Dto;
+using Warden.Services.WardenChecks.Dto;
 
 namespace Warden.Services.Pusher.Services
 {

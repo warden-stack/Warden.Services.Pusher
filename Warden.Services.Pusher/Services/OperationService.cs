@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Warden.Services.Operations.Shared.Events;
+using Warden.Messages.Events.Operations;
 using Warden.Services.Pusher.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
