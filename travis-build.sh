@@ -1,10 +1,12 @@
-#!/bin/bash
-MYGET_ENV=""
+#!/usr/bin/env bash
+APP_ENV=""
 case "$TRAVIS_BRANCH" in
   "develop")
-    MYGET_ENV="-dev"
+    APP_ENV="dev"
     ;;
+  "master")
+    APP_ENV="prod"
+    ;;    
 esac
 
-dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://www.myget.org/F/warden$MYGET_ENV/api/v3/index.json" --no-cache
-dotnet build **/project.json
+npm install
