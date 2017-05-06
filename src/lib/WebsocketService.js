@@ -5,7 +5,7 @@ var socketio = require('socket.io');
 var amqp = require('amqp');
 var RabbitMqConnection = require('./RabbitMqConnection.js');
 var OperationMessageHandler = require('./OperationMessageHandler.js');
-var WardenCheckMessageHandler = require('./WardenCheckMessageHandler.js');
+var WardenCheckResultMessageHandler = require('./WardenCheckResultMessageHandler.js');
 
 
 module.exports = function(configuration) {
@@ -20,13 +20,16 @@ module.exports = function(configuration) {
     var io = socketio(server);
 
     var operationMessageHandler = new OperationMessageHandler(io);
-    var wardenCheckMessageHandler = new WardenCheckMessageHandler(io);
+    var wardenCheckResultMessageHandler = new WardenCheckResultMessageHandler(io);
     var rmqConnection = new RabbitMqConnection(rabbitMqConfig);
 
     rmqConnection.subscribe('warden.messages.events.operations',
       'operationupdated.#',
       operationMessageHandler.publishOperationUpdated);
-      
+
+    rmqConnection.subscribe('warden.messages.events.wardenchecks',
+      'wardencheckresultprocessed.#',
+      wardenCheckResultMessageHandler.publishWardenCheckResultProcessed);      
 
     rmqConnection.connect();
 
